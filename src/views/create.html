@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vytvoření formuláře | FormBuilder</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="header-container"></div> <!-- Sem se vloží header -->
+
+    <script type="module" src="../components/header.js"></script>
+    <script type="module">
+        import { mountHeader } from './header.js';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const headerContainer = document.getElementById("header-container");
+            mountHeader(headerContainer, { activePage: 'home' }); // Nastaví aktivní stránku
+        });
+    </script>
+
+    <main class="form-builder">
+        <div class="container">
+            <div class="form-header">
+                <h2>Vytvořit nový formulář</h2>
+                <p>Přidejte otázky, nastavte jejich typ a upravte vlastnosti formuláře</p>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="form-title">Název formuláře</label>
+                    <input type="text" id="form-title" class="form-control" placeholder="Např. Zpětná vazba na událost" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="form-description">Popis formuláře (volitelné)</label>
+                    <textarea id="form-description" class="form-control" rows="3" placeholder="Stručný popis účelu formuláře"></textarea>
+                </div>
+
+                <div class="divider"></div>
+                
+                <div id="questions-container">
+                    <!-- Zde se budou dynamicky přidávat otázky -->
+                </div>
+
+                <div class="add-question-container">
+                    <button id="add-question-btn" class="btn btn-outline">
+                        <i class="fas fa-plus"></i> Přidat otázku
+                    </button>
+                    
+                    <div class="question-types-menu" id="question-types-menu" style="display: none;">
+                        <div class="question-type" data-type="text">
+                            <i class="fas fa-font"></i> Textová odpověď
+                        </div>
+                        <div class="question-type" data-type="radio">
+                            <i class="fas fa-circle-dot"></i> Výběr jedné možnosti
+                        </div>
+                        <div class="question-type" data-type="checkbox">
+                            <i class="fas fa-check-square"></i> Zaškrtávací pole (více možností)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button id="preview-form-btn" class="btn btn-outline">
+                    <i class="fas fa-eye"></i> Náhled formuláře
+                </button>
+                <button id="save-form-btn" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Dokončit a uložit formulář
+                </button>
+            </div>
+
+            <!-- Dialog pro generování odkazů (skrytý) -->
+            <div id="form-created-dialog" class="dialog" style="display: none;">
+                <div class="dialog-content">
+                    <h3>Formulář byl úspěšně vytvořen!</h3>
+                    <p>Níže najdete odkazy pro sdílení a správu formuláře. Uložte si je, budete je potřebovat pro přístup k odpovědím.</p>
+                    
+                    <div class="form-group">
+                        <label>Odkaz pro respondenty:</label>
+                        <div class="copy-link-container">
+                            <input type="text" id="respondent-link" class="form-control" readonly>
+                            <button class="btn btn-outline copy-btn" data-target="respondent-link">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Odkaz pro administraci:</label>
+                        <div class="copy-link-container">
+                            <input type="text" id="admin-link" class="form-control" readonly>
+                            <button class="btn btn-outline copy-btn" data-target="admin-link">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>PIN pro přístup ke statistikám:</label>
+                        <div class="copy-link-container">
+                            <input type="text" id="admin-pin" class="form-control" readonly>
+                            <button class="btn btn-outline copy-btn" data-target="admin-pin">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="dialog-actions">
+                        <a href="#" id="go-to-form-btn" class="btn btn-outline">Přejít na formulář</a>
+                        <a href="#" id="go-to-admin-btn" class="btn btn-primary">Přejít na administraci</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div> <!-- Sem se vloží footer -->
+
+    <script type="module" src="../components/footer.js"></script>
+
+    <script type="module">
+        import { mountFooter } from './footer.js';
+    
+        document.addEventListener("DOMContentLoaded", () => {
+            const footerContainer = document.getElementById("footer-container");
+            mountFooter(footerContainer, { year: 2025 }); // Volitelně můžeš upravit rok
+        });
+    </script>
+
+    <!-- Templates pro vytváření otázek -->
+    <template id="text-question-template">
+        <div class="question-card" data-question-id="">
+            <div class="question-header">
+                <h3 class="question-type-label">Textová odpověď</h3>
+                <div class="question-actions">
+                    <button class="btn-icon delete-question"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Text otázky:</label>
+                <input type="text" class="form-control question-title" placeholder="Např. Jaký je váš názor?">
+            </div>
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="" class="question-required">
+                <label for="">Povinná otázka</label>
+            </div>
+        </div>
+    </template>
+
+    <template id="radio-question-template">
+        <div class="question-card" data-question-id="">
+            <div class="question-header">
+                <h3 class="question-type-label">Výběr jedné možnosti</h3>
+                <div class="question-actions">
+                    <button class="btn-icon delete-question"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Text otázky:</label>
+                <input type="text" class="form-control question-title" placeholder="Např. Vyberte jednu možnost">
+            </div>
+            <div class="options-container">
+                <div class="option-item">
+                    <input type="text" class="form-control option-text" placeholder="Možnost 1">
+                    <button class="btn-icon delete-option"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="form-control option-text" placeholder="Možnost 2">
+                    <button class="btn-icon delete-option"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <button class="btn btn-outline add-option-btn">
+                <i class="fas fa-plus"></i> Přidat možnost
+            </button>
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="" class="question-required">
+                <label for="">Povinná otázka</label>
+            </div>
+        </div>
+    </template>
+
+    <template id="checkbox-question-template">
+        <div class="question-card" data-question-id="">
+            <div class="question-header">
+                <h3 class="question-type-label">Zaškrtávací pole (více možností)</h3>
+                <div class="question-actions">
+                    <button class="btn-icon delete-question"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Text otázky:</label>
+                <input type="text" class="form-control question-title" placeholder="Např. Zaškrtněte všechny vyhovující možnosti">
+            </div>
+            <div class="options-container">
+                <div class="option-item">
+                    <input type="text" class="form-control option-text" placeholder="Možnost 1">
+                    <button class="btn-icon delete-option"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="form-control option-text" placeholder="Možnost 2">
+                    <button class="btn-icon delete-option"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <button class="btn btn-outline add-option-btn">
+                <i class="fas fa-plus"></i> Přidat možnost
+            </button>
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="" class="question-required">
+                <label for="">Povinná otázka</label>
+            </div>
+        </div>
+    </template>
+
+    <script type="module" src="../modules/formGenerator.js"></script>
+</body>
+</html>
