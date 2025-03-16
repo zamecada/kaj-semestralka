@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormBuilder - Vytvářejte jednoduché online formuláře</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="header-container"></div> <!-- Sem se vloží header -->
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Vytvářejte formuláře snadno a rychle</h1>
+                    <p>Jednoduchá alternativa k Google Forms, bez nutnosti registrace a backendu.</p>
+                    <a href="src/views/create.html" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Vytvořit nový formulář
+                    </a>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/form-illustration.svg" alt="Ilustrace formuláře" class="placeholder-image">
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Proč používat FormBuilder?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-bolt feature-icon"></i>
+                        <h3>Rychlé vytvoření</h3>
+                        <p>Vytvořte formulář během několika minut bez složitého nastavování.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-lock feature-icon"></i>
+                        <h3>Soukromí</h3>
+                        <p>Všechna data jsou uložena pouze lokálně, žádné odesílání na servery.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-bar feature-icon"></i>
+                        <h3>Přehledné statistiky</h3>
+                        <p>Sledujte odpovědi na vašem osobním dashboardu.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-laptop-code feature-icon"></i>
+                        <h3>Offline podpora</h3>
+                        <p>Aplikace funguje i bez připojení k internetu.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <h2>Jak to funguje?</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Vytvořte formulář</h3>
+                            <p>Přidejte otázky, vyberte typy odpovědí a přizpůsobte vzhled.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Sdílejte odkaz</h3>
+                            <p>Získáte unikátní odkaz, který můžete sdílet s respondenty.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Sledujte odpovědi</h3>
+                            <p>Pomocí vašeho PINu přistupujte k odpovědím a statistikám.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div> <!-- Sem se vloží footer -->
+
+    <script type="module" src="src/components/init.js"></script>
+
+    <script type="module" src="src/components/footer.js"></script>
+
+    <script type="module">
+        import { mountFooter } from './footer.js';
+    
+        document.addEventListener("DOMContentLoaded", () => {
+            const footerContainer = document.getElementById("footer-container");
+            mountFooter(footerContainer, { year: 2025 }); // Volitelně můžeš upravit rok
+        });
+    </script>
+    
+
+    <script type="module" src="src/app.js"></script>
+</body>
+</html>
