@@ -7,6 +7,11 @@
  * @returns {string} - A random ID
  */
 export function generateID() {
+    /**
+     * Math.random() generates a random floating-point number between 0 (inclusive) and 1 (exclusive).
+     * .toString(36) converts this number to a base-36 string, which includes digits (0-9) and letters (a-z).
+     * .substring(2, 15) extracts a substring from the base-36 string, starting from the 3rd character (index 2) to the 15th character (index 14). This removes the "0." prefix that appears in the base-36 string representation of a number less than 1.
+     */
     return Math.random().toString(36).substring(2, 15) + 
            Math.random().toString(36).substring(2, 15);
 }
@@ -45,7 +50,7 @@ export function copyToClipboard(text) {
         return true;
     }
     
-    // Fallback for older browsers
+    // Fallback for older browsers (suggested by AI)
     try {
         const textArea = document.createElement('textarea');
         textArea.value = text;
