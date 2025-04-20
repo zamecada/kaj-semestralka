@@ -4,14 +4,36 @@
  */
 
 /**
+ * Vrátí identifikátor aktuální stránky
+ * @return {string} ID stránky
+ */
+const getCurrentPage = () => {
+	const path = window.location.hash;
+	
+	if (path.includes('form-builder')) {
+	  return 'form-builder';
+	} else if (path.includes('features')) {
+	  return 'features';
+	} else if (path.includes('how-it-works')) {
+	  return 'how-it-works';
+	} else {
+	  return 'home';
+	}
+};
+
+
+/**
  * Vyrenderuje HTML kód pro header
  * @param {Object} options - Nastavení headeru
  * @param {string} options.activePage - ID aktivní stránky pro zvýraznění v menu
  * @return {string} HTML kód headeru
  */
 export const renderHeader = (options = {}) => {
-    const { activePage = '' } = options;
-    
+    let { activePage = '' } = options;
+	
+	if (!activePage) {
+		activePage = getCurrentPage();
+	}    
     return `
       <header>
           <div class="container">
@@ -28,18 +50,20 @@ export const renderHeader = (options = {}) => {
           </div>
       </header>
     `;
-  };
+};
   
-  /**
-   * Vloží header do DOM
-   * @param {HTMLElement} targetElement - Element, do kterého se vloží header
-   * @param {Object} options - Nastavení headeru
-   */
-  export const mountHeader = (targetElement, options = {}) => {
-    if (!targetElement) {
-      throw new Error('Target element is required to mount header');
-    }
-    targetElement.insertAdjacentHTML('afterbegin', renderHeader(options));
-  };
-  
-  export default { renderHeader, mountHeader };
+/**
+ * Vloží header do DOM
+ * @param {HTMLElement} targetElement - Element, do kterého se vloží header
+ * @param {Object} options - Nastavení headeru
+ */
+export const mountHeader = (targetElement, options = {}) => {
+	if (!targetElement) {
+		throw new Error('Target element is required to mount header');
+	}
+	targetElement.insertAdjacentHTML('afterbegin', renderHeader(options));
+};
+
+
+
+export default { renderHeader, mountHeader };

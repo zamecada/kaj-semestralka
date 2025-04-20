@@ -15,7 +15,8 @@ export const renderFooter = (options = {}) => {
     return `
       <footer>
           <div class="container">
-              <p>&copy; ${year} FormBuilder - Semestrální práce JS aplikace</p>
+              <p>&copy; ${year} FormBuilder - Semestrální práce KAJ</p>
+              <p>Autor: Adam Zámečník</p>
           </div>
       </footer>
     `;

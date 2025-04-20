@@ -91,3 +91,70 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+```
+kaj-semestralka
+├─ index.html
+├─ README.md
+└─ src
+   ├─ app.js
+   ├─ components
+   │  ├─ footer.js
+   │  ├─ header.js
+   │  └─ init.js
+   ├─ css
+   │  ├─ base.css
+   │  ├─ buttons.css
+   │  ├─ dashboard.css
+   │  ├─ dialog.css
+   │  ├─ form-builder.css
+   │  ├─ landing-page.css
+   │  ├─ layouts.css
+   │  ├─ responsivity.css
+   │  └─ styles.css
+   ├─ modules
+   │  ├─ formGenerator.js
+   │  ├─ storage.js
+   │  └─ utils.js
+   ├─ templates
+   │  └─ questionTemplates.js
+   └─ views
+      └─ create.html
+
+```
+```
+kaj-semestralka
+├─ index.html
+├─ README.md
+└─ src
+   ├─ app.js
+   ├─ components
+   │  ├─ footer.js
+   │  ├─ header.js
+   │  └─ init.js
+   ├─ css
+   │  ├─ base.css
+   │  ├─ buttons.css
+   │  ├─ dashboard.css
+   │  ├─ dialog.css
+   │  ├─ form-builder.css
+   │  ├─ landing-page.css
+   │  ├─ layouts.css
+   │  ├─ responsivity.css
+   │  └─ styles.css
+   ├─ modules
+   │  ├─ adminHandler.js
+   │  ├─ formGenerator.js
+   │  ├─ formHandler.js
+   │  ├─ previewHandler.js
+   │  ├─ storage.js
+   │  └─ utils.js
+   ├─ templates
+   │  └─ questionTemplates.js
+   └─ views
+      ├─ admin.html
+      ├─ create.html
+      ├─ form.html
+      └─ preview.html
+
+```
