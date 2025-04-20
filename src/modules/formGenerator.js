@@ -339,5 +339,5 @@ class FormGenerator {
 // Initialize the form generator when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     const formGenerator = new FormGenerator();
-    window.formGenerator = formGenerator; // For debugging
+    window.formGenerator = formGenerator; // For debugging in the browser console
 });
