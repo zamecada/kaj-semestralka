@@ -7,6 +7,10 @@ kaj-semestralka
    ├─ App.js
    ├─ AppModule.js
    ├─ components
+   │  ├─ charts
+   │  │  ├─ BarChart.js
+   │  │  ├─ ChartManager.js
+   │  │  └─ PieChart.js
    │  ├─ Footer.js
    │  ├─ Header.js
    │  ├─ Init.js
@@ -32,9 +36,8 @@ kaj-semestralka
    │  └─ QuestionTemplates.js
    ├─ services
    │  ├─ EventBus.js
-   │  └─ StorageService.js
-   ├─ templates
-   ├─ Utils.js
+   │  ├─ StorageService.js
+   │  └─ Utils.js
    └─ views
       ├─ admin.html
       ├─ AdminView.js

@@ -1,4 +1,3 @@
-// Část pro app.js - pro správnou inicializaci stránek
 import { App } from './AppModule.js';
 import { OfflineNotification } from './components/OfflineNotification.js';
 
