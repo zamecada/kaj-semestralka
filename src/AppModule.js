@@ -1,3 +1,4 @@
+// src/AppModule.js
 /**
  * Hlavní modul aplikace pro inicializaci a správu služeb
  */
@@ -27,3 +28,6 @@ class AppModule {
 
 // Exportujeme singleton instanci
 export const App = AppModule.getInstance();
+
+// Také přidáme do window pro globální dostupnost
+window.App = App;

@@ -1,7 +1,9 @@
+// src/views/FormPreviewView.js
 /**
  * View pro náhled formuláře
  */
 import { sanitizeInput } from '../utils.js';
+import { App } from '../AppModule.js';
 
 export class FormPreviewView {
   /**
@@ -20,6 +22,8 @@ export class FormPreviewView {
     
     // Inicializace
     this._init();
+    
+    console.log('FormPreviewView initialized with container:', container);
   }
   
   /**
@@ -29,7 +33,9 @@ export class FormPreviewView {
   _init() {
     // Přidat posluchač události pro tlačítko zpět
     if (this.backButton) {
-      this.backButton.addEventListener('click', () => {
+      this.backButton.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent default behavior
+        console.log('Back to edit button clicked');
         if (this.backToEditHandler) {
           this.backToEditHandler();
         } else {
@@ -53,6 +59,8 @@ export class FormPreviewView {
    * @param {Object} formData Data formuláře
    */
   renderForm(formData) {
+    console.log('Rendering form in preview:', formData);
+    
     // Nastavení titulku a popisu
     if (this.formTitle) {
       this.formTitle.textContent = formData.title;
@@ -101,7 +109,7 @@ export class FormPreviewView {
           radioHtml += `
             <div class="radio-option">
               <input type="radio" disabled> 
-              <span>${option}</span>
+              <span>${sanitizeInput(option)}</span>
             </div>
           `;
         });
@@ -114,7 +122,7 @@ export class FormPreviewView {
           checkboxHtml += `
             <div class="checkbox-option" style="margin-bottom: 10px;">
               <input type="checkbox" disabled> 
-              <span>${option}</span>
+              <span>${sanitizeInput(option)}</span>
             </div>
           `;
         });
@@ -138,8 +146,8 @@ export class FormPreviewView {
       container.innerHTML = `
         <div class="form-group" style="text-align: center; padding: 50px 0;">
           <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f44336; margin-bottom: 20px;"></i>
-          <h3>${title}</h3>
-          <p>${message}</p>
+          <h3>${sanitizeInput(title)}</h3>
+          <p>${sanitizeInput(message)}</p>
         </div>
       `;
     }

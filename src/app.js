@@ -1,106 +1,160 @@
-/**
- * Main application initialization script
- */
+// Část pro app.js - pro správnou inicializaci stránek
 import { App } from './AppModule.js';
-import { Form } from './models/form.js';
+import { OfflineNotification } from './components/OfflineNotification.js';
 
-// Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('Form Builder Application initialized');
+    console.log('FormBuilder Application initialized at path:', window.location.pathname);
     
-    // Použijeme StorageService místo přímého volání getData
-    const forms = await App.storageService.getAllForms();
-    console.log(`Found ${forms.length} stored forms`);
-    
-    // Stejná funkcionalita jako v původním souboru
-    const statsContainer = document.getElementById('form-stats');
-    if (statsContainer) {
-        statsContainer.textContent = `${forms.length} formulářů vytvořeno`;
-    }
-    
-    const exampleFormLink = document.getElementById('example-form-link');
-    if (exampleFormLink && forms.length > 0) {
-        const latestForm = forms[forms.length - 1];
-        exampleFormLink.href = `/src/views/form.html?id=${latestForm.id}`;
-        exampleFormLink.textContent = latestForm.title;
-    }
-    
-    // Check for active page and apply appropriate navigation highlight
-    const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll('nav a');
-    
-    navLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
+    try {
+        // Použijeme StorageService místo přímého volání getData
+        const forms = await App.storageService.getAllForms();
+        console.log(`Found ${forms.length} stored forms`);
+        
+        const statsContainer = document.getElementById('form-stats');
+        if (statsContainer) {
+            statsContainer.textContent = `${forms.length} formulářů vytvořeno`;
         }
-    });
-    
-    // Publikujeme událost o inicializaci aplikace
-    App.eventBus.publish('app:initialized', { currentPath });
-
-    // Inicializace stránky pro vytváření formulářů
-    if (window.location.pathname.includes('/src/views/create.html')) {
-        import('./views/FormView.js').then(module => {
-            const FormView = module.FormView;
-            import('./controllers/FormController.js').then(module => {
-                const FormController = module.FormController;
+        
+        const exampleFormLink = document.getElementById('example-form-link');
+        if (exampleFormLink && forms.length > 0) {
+            const latestForm = forms[forms.length - 1];
+            exampleFormLink.href = `/src/views/form.html?id=${latestForm.id}`;
+            exampleFormLink.textContent = latestForm.title;
+        }
+        
+        // Check for active page and apply appropriate navigation highlight
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('nav a');
+        
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+        
+        // Publikujeme událost o inicializaci aplikace
+        App.eventBus.publish('app:initialized', { currentPath });
+        
+        // Inicializace offline notifikace
+        const offlineNotification = new OfflineNotification();
+        console.log('Offline notification component initialized');
+        
+        // Detekce aktuální stránky a inicializace příslušných MVC komponent
+        const currentPagePath = window.location.pathname;
+        
+        // Inicializace stránky pro vytváření formulářů
+        if (currentPagePath.includes('/src/views/create.html')) {
+            console.log('Initializing create.html page with FormView and FormController');
+            
+            try {
+                // Import FormView a FormController
+                const { FormView } = await import('./views/FormView.js');
+                const { FormController } = await import('./controllers/FormController.js');
                 
-                // Vytvoření instance FormView a FormController
-                const formView = new FormView(document.querySelector('.form-container'));
+                // Inicializace View a Controller
+                const formContainer = document.querySelector('.form-container');
+                if (!formContainer) {
+                    throw new Error('Form container not found on create.html page');
+                }
+                
+                const formView = new FormView(formContainer);
                 const formController = new FormController(formView);
                 
-                console.log('Form creation page initialized');
-            });
-        });
-    }
-
-    // Inicializace stránky pro zobrazení formuláře
-    if (window.location.pathname.includes('/src/views/form.html')) {
-        import('./views/FormResponseView.js').then(module => {
-            const FormResponseView = module.FormResponseView;
-            import('./controllers/FormResponseController.js').then(module => {
-                const FormResponseController = module.FormResponseController;
+                // Přidání instance do App pro případnou pozdější manipulaci
+                App.controllers.formController = formController;
                 
-                // Vytvoření instance FormResponseView a FormResponseController
-                const formResponseView = new FormResponseView(document.querySelector('main'));
+                console.log('Create form page successfully initialized');
+            } catch (error) {
+                console.error('Failed to initialize create.html page:', error);
+            }
+        }
+        
+        // Inicializace stránky pro zobrazení formuláře
+        else if (currentPagePath.includes('/src/views/form.html')) {
+            console.log('Initializing form.html page with FormResponseView and FormResponseController');
+            
+            try {
+                // Import FormResponseView a FormResponseController
+                const { FormResponseView } = await import('./views/FormResponseView.js');
+                const { FormResponseController } = await import('./controllers/FormResponseController.js');
+                
+                // Inicializace View a Controller
+                const mainContainer = document.querySelector('main');
+                if (!mainContainer) {
+                    throw new Error('Main container not found on form.html page');
+                }
+                
+                const formResponseView = new FormResponseView(mainContainer);
                 const formResponseController = new FormResponseController(formResponseView);
                 
-                console.log('Form response page initialized');
-            });
-        });
-    }
-
-    // Inicializace stránky pro administraci formuláře
-    if (window.location.pathname.includes('/src/views/admin.html')) {
-        import('./views/AdminView.js').then(module => {
-            const AdminView = module.AdminView;
-            import('./controllers/AdminController.js').then(module => {
-                const AdminController = module.AdminController;
+                // Přidání instance do App pro případnou pozdější manipulaci
+                App.controllers.formResponseController = formResponseController;
                 
-                // Vytvoření instance AdminView a AdminController
-                const adminView = new AdminView(document.querySelector('main'));
+                console.log('Form response page successfully initialized');
+            } catch (error) {
+                console.error('Failed to initialize form.html page:', error);
+            }
+        }
+        
+        // Inicializace stránky pro administraci formuláře
+        else if (currentPagePath.includes('/src/views/admin.html')) {
+            console.log('Initializing admin.html page with AdminView and AdminController');
+            
+            try {
+                // Import AdminView a AdminController
+                const { AdminView } = await import('./views/AdminView.js');
+                const { AdminController } = await import('./controllers/AdminController.js');
+                
+                // Inicializace View a Controller
+                const mainContainer = document.querySelector('main');
+                if (!mainContainer) {
+                    throw new Error('Main container not found on admin.html page');
+                }
+                
+                const adminView = new AdminView(mainContainer);
                 const adminController = new AdminController(adminView);
                 
-                console.log('Admin page initialized');
-            });
-        });
-    }
-
-    // Inicializace stránky pro náhled formuláře
-    if (window.location.pathname.includes('/src/views/preview.html')) {
-        import('./views/FormPreviewView.js').then(module => {
-            const FormPreviewView = module.FormPreviewView;
-            import('./controllers/FormPreviewController.js').then(module => {
-                const FormPreviewController = module.FormPreviewController;
+                // Přidání instance do App pro případnou pozdější manipulaci
+                App.controllers.adminController = adminController;
                 
-                // Vytvoření instance FormPreviewView a FormPreviewController
-                const formPreviewView = new FormPreviewView(document.querySelector('main'));
+                console.log('Admin page successfully initialized');
+            } catch (error) {
+                console.error('Failed to initialize admin.html page:', error);
+            }
+        }
+        
+        // Inicializace stránky pro náhled formuláře
+        else if (currentPagePath.includes('/src/views/preview.html')) {
+            console.log('Initializing preview.html page with FormPreviewView and FormPreviewController');
+            
+            try {
+                // Import FormPreviewView a FormPreviewController
+                const { FormPreviewView } = await import('./views/FormPreviewView.js');
+                const { FormPreviewController } = await import('./controllers/FormPreviewController.js');
+                
+                // Inicializace View a Controller
+                const mainContainer = document.querySelector('main');
+                if (!mainContainer) {
+                    throw new Error('Main container not found on preview.html page');
+                }
+                
+                const formPreviewView = new FormPreviewView(mainContainer);
                 const formPreviewController = new FormPreviewController(formPreviewView);
                 
-                console.log('Form preview page initialized');
-            });
-        });
+                // Přidání instance do App pro případnou pozdější manipulaci
+                App.controllers.formPreviewController = formPreviewController;
+                
+                console.log('Form preview page successfully initialized');
+            } catch (error) {
+                console.error('Failed to initialize preview.html page:', error);
+            }
+        } else {
+            console.log('Current page is not a special view page');
+        }
+        
+    } catch (error) {
+        console.error('Error during application initialization:', error);
     }
 });

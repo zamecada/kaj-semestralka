@@ -1,7 +1,10 @@
+// src/views/FormView.js - úprava pro zajištění funkčnosti tlačítek
+
 /**
  * View pro renderování a interakci s formulářem
  */
-import { sanitizeInput } from '../utils.js';
+import { sanitizeInput } from '../services/Utils.js';
+import { App } from '../AppModule.js';
 
 export class FormView {
   /**
@@ -32,6 +35,9 @@ export class FormView {
     
     // Inicializace View
     this._initView();
+    
+    // Debug log pro ověření inicializace
+    console.log('FormView initialized with container:', container);
   }
   
   /**
@@ -40,13 +46,24 @@ export class FormView {
    */
   _initView() {
     // Získání referencí na důležité elementy
-    this.formTitleInput = this.container.querySelector('#form-title');
-    this.formDescriptionInput = this.container.querySelector('#form-description');
-    this.questionsContainer = this.container.querySelector('#questions-container');
-    this.addQuestionBtn = this.container.querySelector('#add-question-btn');
-    this.questionTypesMenu = this.container.querySelector('#question-types-menu');
-    this.saveFormBtn = this.container.querySelector('#save-form-btn');
-    this.previewFormBtn = this.container.querySelector('#preview-form-btn');
+    this.formTitleInput = document.getElementById('form-title');
+    this.formDescriptionInput = document.getElementById('form-description');
+    this.questionsContainer = document.getElementById('questions-container');
+    this.addQuestionBtn = document.getElementById('add-question-btn');
+    this.questionTypesMenu = document.getElementById('question-types-menu');
+    this.saveFormBtn = document.getElementById('save-form-btn');
+    this.previewFormBtn = document.getElementById('preview-form-btn');
+    
+    // Logování pro ověření, že elementy byly nalezeny
+    console.log('Form elements found:', {
+      formTitleInput: this.formTitleInput,
+      formDescriptionInput: this.formDescriptionInput,
+      questionsContainer: this.questionsContainer,
+      addQuestionBtn: this.addQuestionBtn,
+      questionTypesMenu: this.questionTypesMenu,
+      saveFormBtn: this.saveFormBtn,
+      previewFormBtn: this.previewFormBtn
+    });
     
     // Skryjeme menu typů otázek na začátku
     if (this.questionTypesMenu) {
@@ -55,6 +72,20 @@ export class FormView {
     
     // Inicializace posluchačů událostí
     this._setupEventListeners();
+    
+    // Publikujeme událost o změně titulku
+    if (this.formTitleInput) {
+      this.formTitleInput.addEventListener('input', (e) => {
+        App.eventBus.publish('form:title-change', e.target.value);
+      });
+    }
+    
+    // Publikujeme událost o změně popisu
+    if (this.formDescriptionInput) {
+      this.formDescriptionInput.addEventListener('input', (e) => {
+        App.eventBus.publish('form:description-change', e.target.value);
+      });
+    }
   }
   
   /**
@@ -64,9 +95,12 @@ export class FormView {
   _setupEventListeners() {
     // Zobrazení/skrytí menu typů otázek
     if (this.addQuestionBtn && this.questionTypesMenu) {
-      this.addQuestionBtn.addEventListener('click', () => {
+      console.log('Setting up question type menu toggle');
+      this.addQuestionBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         const isVisible = this.questionTypesMenu.style.display === 'block';
         this.questionTypesMenu.style.display = isVisible ? 'none' : 'block';
+        console.log('Question type menu toggled:', !isVisible);
       });
       
       // Skrytí menu při kliknutí mimo
@@ -79,8 +113,9 @@ export class FormView {
       // Přidání otázky podle vybraného typu
       const questionTypes = this.questionTypesMenu.querySelectorAll('.question-type');
       questionTypes.forEach(typeEl => {
-        typeEl.addEventListener('click', () => {
+        typeEl.addEventListener('click', (e) => {
           const type = typeEl.dataset.type;
+          console.log('Question type selected:', type);
           if (this.handlers.addQuestion) {
             this.handlers.addQuestion(type);
           }
@@ -91,7 +126,10 @@ export class FormView {
     
     // Uložení formuláře
     if (this.saveFormBtn) {
-      this.saveFormBtn.addEventListener('click', () => {
+      console.log('Setting up save form button');
+      this.saveFormBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Save form button clicked');
         if (this.handlers.saveForm) {
           this.handlers.saveForm();
         }
@@ -100,7 +138,10 @@ export class FormView {
     
     // Náhled formuláře
     if (this.previewFormBtn) {
-      this.previewFormBtn.addEventListener('click', () => {
+      console.log('Setting up preview form button');
+      this.previewFormBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Preview form button clicked');
         if (this.handlers.previewForm) {
           this.handlers.previewForm();
         }
