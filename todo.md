@@ -1,0 +1,2 @@
+- pridat odkaz na formular pro respondenty v admin dashboardu
+- pridat tlacitko na otevreni stranky vedle tlacitka na zkopirovani textu (po stisknuti ulozit v create)
