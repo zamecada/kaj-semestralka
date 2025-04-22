@@ -1,7 +1,7 @@
 /**
  * View pro zobrazení a vyplnění formuláře
  */
-import { sanitizeInput } from '../utils.js';
+import { sanitizeInput } from '../services/Utils.js';
 
 export class FormResponseView {
   /**

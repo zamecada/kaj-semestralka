@@ -2,7 +2,7 @@
 /**
  * View pro náhled formuláře
  */
-import { sanitizeInput } from '../utils.js';
+import { sanitizeInput } from '../services/Utils.js';
 import { App } from '../AppModule.js';
 
 export class FormPreviewView {
