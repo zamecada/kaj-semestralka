@@ -55,4 +55,52 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         });
     }
+
+    // Inicializace stránky pro zobrazení formuláře
+    if (window.location.pathname.includes('/src/views/form.html')) {
+        import('./views/FormResponseView.js').then(module => {
+            const FormResponseView = module.FormResponseView;
+            import('./controllers/FormResponseController.js').then(module => {
+                const FormResponseController = module.FormResponseController;
+                
+                // Vytvoření instance FormResponseView a FormResponseController
+                const formResponseView = new FormResponseView(document.querySelector('main'));
+                const formResponseController = new FormResponseController(formResponseView);
+                
+                console.log('Form response page initialized');
+            });
+        });
+    }
+
+    // Inicializace stránky pro administraci formuláře
+    if (window.location.pathname.includes('/src/views/admin.html')) {
+        import('./views/AdminView.js').then(module => {
+            const AdminView = module.AdminView;
+            import('./controllers/AdminController.js').then(module => {
+                const AdminController = module.AdminController;
+                
+                // Vytvoření instance AdminView a AdminController
+                const adminView = new AdminView(document.querySelector('main'));
+                const adminController = new AdminController(adminView);
+                
+                console.log('Admin page initialized');
+            });
+        });
+    }
+
+    // Inicializace stránky pro náhled formuláře
+    if (window.location.pathname.includes('/src/views/preview.html')) {
+        import('./views/FormPreviewView.js').then(module => {
+            const FormPreviewView = module.FormPreviewView;
+            import('./controllers/FormPreviewController.js').then(module => {
+                const FormPreviewController = module.FormPreviewController;
+                
+                // Vytvoření instance FormPreviewView a FormPreviewController
+                const formPreviewView = new FormPreviewView(document.querySelector('main'));
+                const formPreviewController = new FormPreviewController(formPreviewView);
+                
+                console.log('Form preview page initialized');
+            });
+        });
+    }
 });

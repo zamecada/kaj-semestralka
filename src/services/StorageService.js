@@ -162,4 +162,44 @@ export class StorageService {
         return false;
       }
     }
+
+    /**
+     * Přidá posluchače stavu připojení
+     * @param {Function} onlineCallback Callback pro online stav
+     * @param {Function} offlineCallback Callback pro offline stav
+     * @returns {Function} Funkce pro odstranění posluchačů
+     */
+    addConnectionListeners(onlineCallback, offlineCallback) {
+      const handleOnline = () => {
+        if (onlineCallback) onlineCallback();
+      };
+      
+      const handleOffline = () => {
+        if (offlineCallback) offlineCallback();
+      };
+      
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+      
+      // Okamžitá kontrola stavu
+      if (navigator.onLine) {
+        if (onlineCallback) onlineCallback();
+      } else {
+        if (offlineCallback) offlineCallback();
+      }
+      
+      // Vrací funkci pro odstranění posluchačů
+      return () => {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      };
+    }
+
+    /**
+     * Kontroluje, zda je zařízení online
+     * @returns {boolean} Je zařízení online?
+     */
+    isOnline() {
+      return navigator.onLine;
+    }
   }

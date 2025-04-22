@@ -158,3 +158,54 @@ kaj-semestralka
       └─ preview.html
 
 ```
+```
+kaj-semestralka
+├─ index.html
+├─ README.md
+└─ src
+   ├─ app.js
+   ├─ AppModule.js
+   ├─ components
+   │  ├─ footer.js
+   │  ├─ header.js
+   │  ├─ init.js
+   │  └─ OfflineNotification.js
+   ├─ controllers
+   │  ├─ AdminController.js
+   │  ├─ FormController.js
+   │  └─ FormResponseController.js
+   ├─ css
+   │  ├─ base.css
+   │  ├─ buttons.css
+   │  ├─ dashboard.css
+   │  ├─ dialog.css
+   │  ├─ form-builder.css
+   │  ├─ landing-page.css
+   │  ├─ layouts.css
+   │  ├─ responsivity.css
+   │  └─ styles.css
+   ├─ models
+   │  ├─ Form.js
+   │  └─ Question.js
+   ├─ modules
+   │  ├─ adminHandler.js
+   │  ├─ formGenerator.js
+   │  ├─ formHandler.js
+   │  ├─ previewHandler.js
+   │  ├─ storage.js
+   │  └─ utils.js
+   ├─ services
+   │  ├─ EventBus.js
+   │  └─ StorageService.js
+   ├─ templates
+   │  └─ questionTemplates.js
+   └─ views
+      ├─ admin.html
+      ├─ AdminView.js
+      ├─ create.html
+      ├─ form.html
+      ├─ FormResponseView.js
+      ├─ FormView.js
+      └─ preview.html
+
+```
