@@ -2,6 +2,7 @@
  * View pro administraci formuláře
  */
 import { formatDate } from '../services/Utils.js';
+import chartManager from '../components/charts/ChartManager.js';
 
 export class AdminView {
 	/**
@@ -161,72 +162,33 @@ export class AdminView {
 		
 		const responses = formData.responses || [];
 		if (responses.length === 0) {
-		this.chartsContainer.innerHTML = '<p style="text-align: center;">Pro tento formulář nejsou k dispozici žádné grafy.</p>';
-		return;
+			this.chartsContainer.innerHTML = '<p style="text-align: center;">Pro tento formulář nejsou k dispozici žádné grafy.</p>';
+			return;
 		}
 		
-		// Vykreslení statistik pouze pro otázky s výběrem (radio, checkbox)
+		// Použijeme ChartManager pro vykreslení grafů pro checkbox a radio otázky
 		const chartableQuestions = formData.questions.filter(q => 
-		q.type === 'radio' || q.type === 'checkbox');
+			q.type === 'radio' || q.type === 'checkbox');
 		
-		if (chartableQuestions.length === 0) {
-		this.chartsContainer.innerHTML = '<p style="text-align: center;">Pro tento formulář nejsou k dispozici žádné grafy.</p>';
-		return;
+		if (chartableQuestions.length > 0) {
+			chartManager.renderCharts(this.chartsContainer, formData);
 		}
 		
-		// Zpracování otázek
-		chartableQuestions.forEach(question => {
-		const questionSection = document.createElement('div');
-		questionSection.className = 'question-section';
-		
-		// Titulek otázky včetně počtu odpovědí
-		questionSection.innerHTML = `
-			<h3>${question.title}</h3>
-			<p class="response-count">${responses.length} odpovědí</p>
-		`;
-		
-		// Vytvoření statistik pro otázku
-		const stats = this._calculateOptionStats(question, responses);
-		
-		// Vytvoření vizualizace pro každou možnost
-		const optionsContainer = document.createElement('div');
-		optionsContainer.className = 'options-stats';
-		
-		stats.forEach(stat => {
-			// Vytvoření progress baru
-			const optionBar = document.createElement('div');
-			optionBar.className = 'option-stat-bar';
-			
-			optionBar.innerHTML = `
-			<div class="option-text">${stat.option}</div>
-			<div class="option-bar-container">
-				<div class="option-progress" style="width: ${stat.percentage}%; background-color: var(--primary-color);"></div>
-			</div>
-			<div class="stat-values">${stat.percentage}% | ${stat.count} ${this._getResponseWord(stat.count)}</div>
-			`;
-			
-			optionsContainer.appendChild(optionBar);
-		});
-		
-		questionSection.appendChild(optionsContainer);
-		this.chartsContainer.appendChild(questionSection);
-		});
-		
-		// Přidání textových odpovědí
+		// Přidání textových odpovědí - tento kód zachovává původní funkcionalitu
 		const textQuestions = formData.questions.filter(q => q.type === 'text');
 		
 		if (textQuestions.length > 0) {
-		const textSection = document.createElement('div');
-		textSection.className = 'text-questions-section';
-		
-		textQuestions.forEach(question => {
+			const textSection = document.createElement('div');
+			textSection.className = 'text-questions-section';
+			
+			textQuestions.forEach(question => {
 			const questionSection = document.createElement('div');
 			questionSection.className = 'question-section';
 			
 			// Titulek otázky
 			questionSection.innerHTML = `
-			<h3>${question.title}</h3>
-			<p class="response-count">${responses.length} odpovědí</p>
+				<h3>${question.title}</h3>
+				<p class="response-count">${responses.length} odpovědí</p>
 			`;
 			
 			// Seznam textových odpovědí
@@ -234,98 +196,35 @@ export class AdminView {
 			textList.className = 'text-responses';
 			
 			const answers = responses.map(response => {
-			// V původní struktuře odpovědi byly v hlavním objektu
-			if (response[question.id]) {
+				// V původní struktuře odpovědi byly v hlavním objektu
+				if (response[question.id]) {
 				return response[question.id];
-			}
-			
-			// V nové struktuře jsou odpovědi v objektu answers
-			if (response.answers && response.answers[question.id]) {
+				}
+				
+				// V nové struktuře jsou odpovědi v objektu answers
+				if (response.answers && response.answers[question.id]) {
 				return response.answers[question.id];
-			}
-			
-			return '(bez odpovědi)';
+				}
+				
+				return '(bez odpovědi)';
 			});
 			
 			answers.forEach(answer => {
-			if (answer && answer.trim()) {
+				if (answer && answer.trim()) {
 				textList.innerHTML += `<div class="text-response">${answer}</div>`;
-			}
+				}
 			});
 			
 			if (textList.children.length === 0) {
-			textList.innerHTML = '<div class="text-response empty">Žádné textové odpovědi</div>';
+				textList.innerHTML = '<div class="text-response empty">Žádné textové odpovědi</div>';
 			}
 			
 			questionSection.appendChild(textList);
 			textSection.appendChild(questionSection);
-		});
-		
-		this.chartsContainer.appendChild(textSection);
-		}
-	}
-	
-	/**
-	 * Vrátí české slovo pro počet odpovědí (odpověď/odpovědi/odpovědí)
-	 * @param {number} count Počet odpovědí
-	 * @returns {string} Slovo v odpovídajícím tvaru
-	 * @private
-	 */
-	_getResponseWord(count) {
-		if (count === 1) return 'odpověď';
-		if (count >= 2 && count <= 4) return 'odpovědi';
-		return 'odpovědí';
-	}
-	
-	/**
-	 * Počítá statistiky pro jednotlivé možnosti
-	 * @param {Object} question Otázka
-	 * @param {Array} responses Odpovědi
-	 * @returns {Array} Statistiky možností
-	 * @private
-	 */
-	_calculateOptionStats(question, responses) {
-		const stats = [];
-		const totalResponses = responses.length;
-		
-		// Inicializace pro všechny možnosti
-		question.options.forEach(option => {
-		stats.push({
-			option: option,
-			count: 0,
-			percentage: 0
-		});
-		});
-		
-		// Počítání odpovědí
-		responses.forEach(response => {
-		// Podpora pro původní i novou strukturu odpovědí
-		const answer = response[question.id] || (response.answers ? response.answers[question.id] : null);
-		
-		if (question.type === 'radio') {
-			// Pro radio je odpověď string
-			if (answer) {
-			const statItem = stats.find(stat => stat.option === answer);
-			if (statItem) statItem.count++;
-			}
-		} else if (question.type === 'checkbox') {
-			// Pro checkbox je odpověď pole
-			if (Array.isArray(answer)) {
-			answer.forEach(selectedOption => {
-				const statItem = stats.find(stat => stat.option === selectedOption);
-				if (statItem) statItem.count++;
 			});
-			}
+			
+			this.chartsContainer.appendChild(textSection);
 		}
-		});
-		
-		// Výpočet procent
-		stats.forEach(stat => {
-		stat.percentage = Math.round((stat.count / totalResponses) * 100) || 0;
-		});
-		
-		// Seřazení dle počtu odpovědí (sestupně)
-		return stats.sort((a, b) => b.count - a.count);
 	}
 	
 	/**
@@ -425,71 +324,5 @@ export class AdminView {
 		`;
 		
 		container.innerHTML = html;
-	}
-
-	/**
-	 * Vykreslí sloupcový graf jako SVG prvek uvnitř zadaného kontejneru.
-	 * Každý sloupec reprezentuje jednu položku dat, přičemž jeho výška odpovídá hodnotě `percentage`.
-	 * Graf obsahuje animace, popisky a procentuální hodnoty pro každý sloupec.
-	 *
-	 * @param {HTMLElement} container - DOM prvek, do kterého bude SVG graf připojen.
-	 * @param {Array<Object>} data - Pole datových objektů, které mají být zobrazeny v grafu.
-	 * @param {string} data[].option - Popisek sloupce, zobrazený pod ním.
-	 * @param {number} data[].percentage - Výška sloupce, vyjádřená v procentech (0–100).
-	 */
-	_renderSvgChart(container, data) {
-		const svgNS = "http://www.w3.org/2000/svg";
-		const svg = document.createElementNS(svgNS, "svg");
-		svg.setAttribute("width", "100%");
-		svg.setAttribute("height", "200");
-		svg.setAttribute("viewBox", "0 0 300 100");
-		
-		// Definice barev
-		const colors = ['#6c63ff', '#7d75ff', '#8e86ff', '#9f98ff', '#b0a9ff'];
-		
-		// Vytvoření grafu
-		data.forEach((item, index) => {
-			const bar = document.createElementNS(svgNS, "rect");
-			bar.setAttribute("x", index * 60 + 10);
-			bar.setAttribute("y", 100 - item.percentage);
-			bar.setAttribute("width", 40);
-			bar.setAttribute("height", item.percentage);
-			bar.setAttribute("fill", colors[index % colors.length]);
-			
-			// Animace při načtení
-			bar.style.transform = "scaleY(0)";
-			bar.style.transformOrigin = "bottom";
-			bar.style.transition = "transform 0.5s ease";
-			
-			svg.appendChild(bar);
-			
-			// Text s hodnotou
-			const text = document.createElementNS(svgNS, "text");
-			text.setAttribute("x", index * 60 + 30);
-			text.setAttribute("y", 95 - item.percentage);
-			text.setAttribute("text-anchor", "middle");
-			text.setAttribute("fill", "#333");
-			text.textContent = `${item.percentage}%`;
-			svg.appendChild(text);
-			
-			// Label
-			const label = document.createElementNS(svgNS, "text");
-			label.setAttribute("x", index * 60 + 30);
-			label.setAttribute("y", 115);
-			label.setAttribute("text-anchor", "middle");
-			label.setAttribute("fill", "#666");
-			label.textContent = item.option.substring(0, 10);
-			svg.appendChild(label);
-		});
-		
-		container.appendChild(svg);
-		
-		// Spustit animaci
-		setTimeout(() => {
-			const bars = svg.querySelectorAll("rect");
-			bars.forEach(bar => {
-			bar.style.transform = "scaleY(1)";
-			});
-		}, 100);
 	}
 }
