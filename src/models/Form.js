@@ -1,7 +1,7 @@
 /**
  * Model reprezentující formulář
  */
-import { generateID } from '../utils.js';
+import { generateID } from '../services/Utils.js';
 
 export class Form {
   /**

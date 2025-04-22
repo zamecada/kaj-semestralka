@@ -2,7 +2,7 @@
  * Controller pro administraci formuláře
  */
 import { App } from '../AppModule.js';
-import { formatDate } from '../utils.js';
+import { formatDate } from '../services/Utils.js';
 
 export class AdminController {
   /**
