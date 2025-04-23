@@ -6,7 +6,53 @@
 }
 
 .dashboard-header {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
+}
+
+.dashboard-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.form-links {
+  flex-shrink: 0;
+}
+
+.form-links .copy-link-container {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.form-links .form-control {
+  width: 280px;
+}
+
+.form-links .btn {
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header-content {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+  
+  .form-links {
+      width: 100%;
+  }
+  
+  .form-links .form-control {
+      width: 100%;
+  }
+  
+  .form-links .copy-link-container {
+      width: 100%;
+  }
 }
 
 /* Statistické karty */

@@ -79,6 +79,38 @@ export class AdminController {
 		// Zobrazení dashboardu
 		this.view.showDashboard(this.formData);
 		
+		// Nastavení odkazu pro respondenty
+		const respondentLink = document.getElementById('respondent-link');
+		const openFormLink = document.getElementById('open-form-link');
+		
+		if (respondentLink) {
+			const formUrl = `${window.location.origin}/src/views/form.html?id=${this.formId}`;
+			respondentLink.value = formUrl;
+			
+			// Přidání funkcionality kopírování
+			const copyBtn = document.querySelector('.copy-btn[data-target="respondent-link"]');
+			if (copyBtn) {
+				copyBtn.addEventListener('click', () => {
+					import('../services/Utils.js').then(utils => {
+						const success = utils.copyToClipboard(respondentLink.value);
+						if (success) {
+							// Vizuální potvrzení
+							const originalText = copyBtn.innerHTML;
+							copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+							setTimeout(() => {
+								copyBtn.innerHTML = originalText;
+							}, 2000);
+						}
+					});
+				});
+			}
+			
+			// Nastavení URL pro otevření formuláře
+			if (openFormLink) {
+				openFormLink.href = formUrl;
+			}
+		}
+		
 		// Publikování události o úspěšném přihlášení
 		this.eventBus.publish('admin:loggedIn', {
 			formId: this.formId
