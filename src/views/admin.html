@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrace formuláře | FormBuilder</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="header-container"></div> <!-- Sem se vloží header -->
+    <main class="dashboard">
+        <div class="container">
+            <!-- PIN přihlašovací obrazovka -->
+            <div id="pin-login" style="display: block;">
+                <div class="form-container" style="max-width: 500px; margin: 100px auto;">
+                    <div class="form-header">
+                        <h2>Přístup k administraci</h2>
+                        <p>Pro zobrazení výsledků formuláře zadejte PIN</p>
+                    </div>
+                   
+                    <div class="form-group">
+                        <label for="admin-pin-input">Zadejte PIN:</label>
+                        <input type="text" id="admin-pin-input" class="form-control" placeholder="Např. 1234" maxlength="4">
+                    </div>
+                   
+                    <div class="form-actions" style="justify-content: flex-start; margin-top: 30px;">
+                        <button id="pin-submit" class="btn btn-primary">
+                            <i class="fas fa-lock-open"></i> Odemknout administraci
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Dashboard po přihlášení -->
+            <div id="admin-dashboard" style="display: none;">
+                <div class="dashboard-header">
+                    <div class="dashboard-header-content">
+                        <h1 id="form-title"></h1>
+                        <div class="form-links">
+                            <div class="copy-link-container">
+                                <input type="text" id="respondent-link" class="form-control" readonly>
+                                <button class="btn btn-outline copy-btn" data-target="respondent-link">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <a href="#" id="open-form-link" class="btn btn-primary" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i> Otevřít
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Celkem odpovědí</h3>
+                        <div class="stat-value" id="total-responses">0</div>
+                    </div>
+                   
+                    <div class="stat-card">
+                        <h3>Poslední odpověď</h3>
+                        <div class="stat-value" id="last-response-date">-</div>
+                    </div>
+                </div>
+               
+                <div id="chart-container" style="background-color: var(--bg-color); padding: 20px; border-radius: var(--radius); margin-bottom: 30px; box-shadow: var(--shadow);">
+                    <h2>Přehled odpovědí</h2>
+                    <div id="charts">
+                        <!-- Místo pro grafy -->
+                    </div>
+                </div>
+                <h2>Všechny odpovědi</h2>
+                <div id="responses-container" style="margin-top: 20px;">
+                    <!-- Dynamicky generované odpovědi -->
+                </div>
+               
+                <div class="form-actions" style="margin-top: 30px;">
+                    <button id="export-btn" class="btn btn-outline">
+                        <i class="fas fa-download"></i> Exportovat odpovědi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="footer-container"></div> <!-- Sem se vloží footer -->
+    <script type="module" src="../components/init.js"></script>
+    <script type="module" src="../App.js"></script>
+</body>
+</html>
