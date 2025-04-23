@@ -440,6 +440,18 @@ export class FormView {
 				}
 			});
 		});
+		
+		// Přidání funkce pro otevření odkazů v novém okně
+		const openButtons = dialog.querySelectorAll('.open-link-btn');
+		openButtons.forEach(btn => {
+			btn.addEventListener('click', () => {
+				const targetId = btn.dataset.target;
+				const targetInput = document.getElementById(targetId);
+				if (targetInput && targetInput.value) {
+					window.open(targetInput.value, '_blank');
+				}
+			});
+		});
 
 		// Nastavení tlačítek v dialogu
 		const goToFormBtn = document.getElementById('go-to-form-btn');

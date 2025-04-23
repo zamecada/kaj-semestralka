@@ -41,7 +41,7 @@
 /* Kopírování odkazů */
 .copy-link-container {
     display: flex;
-    gap: 10px;
+    gap: 5px;
 }
 
 .copy-link-container .form-control {
@@ -51,4 +51,20 @@
 .copy-link-container .btn {
     flex-shrink: 0;
     padding: 10px;
+}
+
+.copy-link-container .btn-outline {
+    background-color: var(--bg-light);
+}
+
+.copy-link-container .btn-primary {
+    padding: 10px 12px;
+}
+
+.copy-link-container .open-link-btn {
+    transition: var(--transition);
+}
+
+.copy-link-container .open-link-btn:hover {
+    background-color: var(--primary-color-hover);
 }
