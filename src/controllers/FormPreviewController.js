@@ -2,7 +2,7 @@
  * Controller pro náhled formuláře
  */
 import { App } from '../AppModule.js';
-import { Form } from '../models/form.js';
+import { Form } from '../models/Form.js';
 
 export class FormPreviewController {
   /**

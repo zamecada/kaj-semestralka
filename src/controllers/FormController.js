@@ -3,7 +3,7 @@
 /**
  * Controller pro správu formuláře
  */
-import { Form } from '../models/form.js';
+import { Form } from '../models/Form.js';
 import { Question } from '../models/Question.js';
 import { App } from '../AppModule.js';
 

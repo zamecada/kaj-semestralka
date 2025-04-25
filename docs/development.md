@@ -30,7 +30,7 @@ kaj-semestralka/
 
 V další fázi jsem začal implementovat první verzi funkčnosti pro vytváření formulářů. V této fázi jsem experimentoval s různými přístupy, což je vidět na vzniku více verzí některých souborů:
 
-- Vytvoření různých verzí aplikační logiky (app.js, app2.js)
+- Vytvoření různých verzí aplikační logiky (App.js, app2.js)
 - Implementace modulů pro generování formulářů (formGenerator.js, formGenerator2.js)
 - Různé přístupy k ukládání dat (storage.js, storage2.js)
 - Vytvoření základních utilit a šablon pro otázky
@@ -42,7 +42,7 @@ kaj-semestralka/
 ├─ index.html
 ├─ README.md
 └─ src/
-   ├─ app.js                        # První verze aplikační logiky
+   ├─ App.js                        # První verze aplikační logiky
    ├─ app2.js                       # Alternativní verze
    ├─ components/
    ├─ modules/                      # Experimentální moduly
@@ -103,7 +103,7 @@ V rámci Fáze 5 jsem konečně celý projekt úspěšně překlopil do plně ob
 - Vytvoření kompletní sady kontrolerů (AdminController.js, FormResponseController.js, FormPreviewController.js)
 - Implementace odpovídajících pohledů (AdminView.js, FormResponseView.js, FormPreviewView.js)
 - Přidání OfflineNotification.js komponenty
-- Úprava hlavního app.js pro dynamické načítání modulů podle aktuální stránky
+- Úprava hlavního App.js pro dynamické načítání modulů podle aktuální stránky
 
 Zásadní změny v architektuře:
 1. **Čistý MVC přístup** - oddělení dat, business logiky a UI
